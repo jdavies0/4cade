@@ -1,5 +1,5 @@
 ;license:MIT
-;(c) 2020, 2022 by qkumba
+;(c) 2020, 2022, 2025 by qkumba, Frank M.
 
 !cpu 6502
 !to "build/PRELAUNCH.INDEXED/STARGLIDER",plain
@@ -7,6 +7,7 @@
 
     !source "src/macros.a"
 
+         inc   $3F4       ; reboot during title screen
          +READ_RAM2_NO_WRITE
          jsr   EnableAccelerator
          lda   MachineStatus
@@ -17,11 +18,20 @@
          sta   $81FC
          jsr   $800       ; decompress
 
+         lda   $bf30
+         lsr
+         lsr
+         lsr
+         lsr
+         and   #7
+         ora   #$78
+         sta   patch + 1
+
          jsr   DisableAccelerator
          jsr   HideLaunchArtworkLC2
          jsr   $BA7B
 
-         ldx   #5
+         ldx   #8
 -        lda   reset,x
          sta   $110,x
          dex
@@ -44,10 +54,10 @@
          sta   $9D70      ; patch - don't increase damage
          sta   $9E37      ; patch - don't increase damage
 +
-
          jmp   $BA00
 
 reset    lda   $C089
+patch    sta   $478       ; SMC, hide CFFA state in case of reset
          jmp   $FAA6
 
 !if * > PrelaunchMax {
