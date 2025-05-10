@@ -5,8 +5,6 @@
 !ifndef _FX_MACROS_ {
          !source "src/macros.a"
          !source "src/fx/macros.hgr.a"
-         !source "src/fx/macros.dhgr.a"
-         !source "src/fx/macros.shr.a"
          !source "src/fx/macros.copybit.a"
          !source "src/fx/macros.misc.a"
 
